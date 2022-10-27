@@ -5,6 +5,8 @@ namespace InventoryManagementBlazor.Server.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        [Key]
+        public int Id { get; set; }
         [EmailAddress]
         public string Email { get; set; }
 

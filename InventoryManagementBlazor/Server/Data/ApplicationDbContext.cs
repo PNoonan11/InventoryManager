@@ -13,7 +13,10 @@ namespace InventoryManagementBlazor.Server.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
-        public DbSet<Products> Products { get; set; }
-        public DbSet<Locations> Locations { get; set; }
+        public DbSet<ProductEntity> Products { get; set; }
+        public DbSet<LocationEntity> Locations { get; set; }
+        public DbSet<SaleEntity> Sales { get; set; }
+        public DbSet<CustomerEntity> Customers { get; set; }
+
     }
 }

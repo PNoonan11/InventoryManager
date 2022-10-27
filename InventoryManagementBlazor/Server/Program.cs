@@ -1,5 +1,7 @@
 using InventoryManagementBlazor.Server.Data;
 using InventoryManagementBlazor.Server.Models;
+using InventoryManagementBlazor.Server.Services.Products;
+using InventoryManagementBlazor.Server.Services.Locations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IProductServices, ProductServices>();
+builder.Services.AddScoped<ILocationServices, LocationServices>();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));

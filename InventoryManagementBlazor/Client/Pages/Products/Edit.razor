@@ -1,0 +1,32 @@
+﻿@page "/products/edit/{Id:int}"
+@using InventoryManagementBlazor.Shared.Models.Locations
+@using InventoryManagementBlazor.Shared.Models.Products
+@inject HttpClient http
+@inject NavigationManager navigation
+
+<h3>Edit Product: @Model.ProductName</h3>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private ProductEdit Model { get; set; }
+    private IEnumerable<LocationListItem> Locations { get; set; }
+    private string ErrorMessage { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await http.GetFromJsonAsync<ProductEdit>($"/api/note/{Id}");
+        Locations = await http.GetFromJsonAsync<IEnumerable<LocationListItem>>("/api/locations/");
+    }
+    private async void HandleSubmit()
+    {
+        var createRes = await http.PutAsJsonAsync<ProductEdit>($"/api/products/edit/{Id}", Model);
+        if (createRes.IsSuccessStatusCode)
+        {
+            navigation.NavigateTo($"/note/{Id}");
+        }
+        else
+        {
+            ErrorMessage = "Could not create your product right now. Please try again later.";
+        }
+    }
+}

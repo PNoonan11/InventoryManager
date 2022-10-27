@@ -1,0 +1,62 @@
+﻿@page "/products/create"
+@attribute [Authorize]
+@inject HttpClient http
+@using InventoryManagementBlazor.Shared.Models.Products
+@using System.Net.Http.Json
+@using InventoryManagementBlazor.Shared.Models.Locations
+@using Microsoft.AspNetCore.Authorization
+@inject NavigationManager navigation
+<h3>Create</h3>
+@if (errorMessage != null)
+{
+    <h5 class="text-danger">@errorMessage</h5>
+}
+<div class="container">
+    
+          <EditForm Model="@model" OnValidSubmit="@HandleSubmit">
+               <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label>Product Name</label>
+            <InputText class="form-control" @bind-Value="model.ProductName" />
+            <label>Product Description</label>
+            <InputText class="form-control" @bind-Value="model.ProductDesctiption" />
+            <label>Stock Number</label>
+            <InputText class="form-control" @bind-Value="model.StockNumber" />
+            <label>Product Location</label>
+            <InputSelect class="form-control" @bind-Value="model.Location">
+            @foreach (var loc in locationList)
+            {
+                <option value="@loc.Id">@loc.Location</option>
+            }
+            </InputSelect>
+            <label>Quantity</label>
+            <InputText class="form-control" @bind-Value="model.Quantity" />
+            <label>Date Received</label>
+            <InputText class="form-control" @bind-Value="model.DateReceived" />
+            <button type="submit" class="btn btn-primary btn-block mt-5">Submit</button>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private ProductCreate model = new();
+    private IEnumerable<LocationListItem> locationList;
+    private string errorMessage;
+    protected override async Task OnInitializedAsync()
+    {
+        locationList = await http.GetFromJsonAsync<IEnumerable<LocationListItem>>("/api/category/");
+    }
+    private async void HandleSubmit()
+    {
+        var createRes = await http.PostAsJsonAsync<ProductCreate>("/api/note", model);
+        if (createRes.IsSuccessStatusCode)
+        {
+            navigation.NavigateTo("/note");
+        }
+        else
+        {
+            errorMessage = "Could not enter your product right now, Please try again later.";
+        }
+    }
+}

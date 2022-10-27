@@ -1,0 +1,51 @@
+﻿@page "/Products/Index"
+@using InventoryManagementBlazor.Shared.Models.Products
+@inject HttpClient Http
+@attribute [Authorize]
+<h3>Products</h3>
+<a href="/products/create">Enter A Product.</a>
+@if (productList == null)
+{
+    <p><em>Loading....</em></p>
+}
+else 
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Product Name</th>
+                <th>Product Description</th>
+                <th>Stock Number</th>
+                <th>Location</th>
+                <th>Quantity</th>
+                <th>Date Received</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ProductListItem item in productList)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.ProductDescription</td>
+                    <td>@item.StockNumber</td>
+                    <td>@item.ProductLocation</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.DateReceived</td>
+                </tr>
+            }
+            @code {
+            private List<ProductListItem> productList;
+            protected override async Task OnInitializedAsync()
+            {
+                productList = await Http.GetFromJsonAsync<List<ProductListItem>>("Products");
+            }
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+}

@@ -1,0 +1,43 @@
+﻿@page "/location"
+@using InventoryManagementBlazor.Shared.Models.Locations
+@attribute [Authorize]
+@inject HttpClient http
+<h3>Index</h3>
+<a href="/locations/create">Create a Location</a>
+@if (_locations == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Location</th>
+                <th>&nbsp;</th>
+            </tr>
+        <tbody>
+                @foreach (var locations in _locations)
+                {
+                <tr>
+        <td><strong>@locations.Location</strong></td>
+       
+            
+            <a href=@($"location/{locations.Id}")>Details</a>
+            <a href=@($"location/edit/{locations.Id}")>Edit</a>
+            <a href=@($"location/delete/{locations.Id}")>Delete</a>
+                </tr>
+                }
+                
+        </tbody>
+        
+        </thead>
+    </table>
+}
+@code {
+    private IEnumerable<LocationListItem> _locations;
+    protected override async Task OnInitializedAsync()
+    {
+        _locations = await http.GetFromJsonAsync<List<LocationListItem>>("/api/location");
+    }
+}
