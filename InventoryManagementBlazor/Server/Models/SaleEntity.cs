@@ -8,7 +8,8 @@
         public int ProductQuantitySold { get; set; }
         public int LocationSoldFrom { get; set; }
         public DateTimeOffset DateOfSale { get; set; }
-        public ICollection<CustomerEntity> CustomerSoldTo { get; set; }
+        public int CustomerSoldTo { get; set; }
+        public ICollection<CustomerEntity> Customer { get; set; }
         public int SoldByUserId { get; set; }
     }
 }
